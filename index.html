@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #8b5cf6; }
-        /* تفعيل التمرير العمودي لضمان ظهور كافة العناصر على الموبايل */
         body { font-family: 'Baloo Bhaijaan 2', cursive; overflow-x: hidden; overflow-y: auto; user-select: none; }
 
         /* الخلفية */
@@ -40,11 +39,9 @@
         .hidden { display: none !important; }
         .confetti { position: fixed; width: 10px; height: 10px; z-index: 100; pointer-events: none; }
         
-        /* تنسيق الرسوم البيانية المتجاوب */
         .chart-container { display: flex; justify-content: center; align-items: center; margin-bottom: 1rem; background: #fff; border-radius: 15px; padding: 10px; border: 2px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); overflow-x: auto; }
         .chart-svg { height: auto; max-height: 250px; width: 100%; max-width: 500px; overflow: visible; }
         
-        /* SVG Elements */
         .axis-line { stroke: #475569; stroke-width: 2; }
         .grid-line { stroke: #e2e8f0; stroke-width: 1; }
         .axis-text { font-size: 11px; fill: #64748b; font-family: sans-serif; font-weight: 500; }
@@ -87,7 +84,7 @@
                 <div class="flex justify-between items-center border-b pb-2 mb-2">
                     <h3 class="text-md md:text-lg font-bold text-gray-700">النتائج</h3> <span class="text-xl md:text-2xl">🏆</span>
                 </div>
-                <div id="scoreboard" class="grid grid-cols-2 md:grid-cols-1 gap-2 md:gap-2 overflow-y-auto p-1"></div>
+                <div id="scoreboard" class="grid grid-cols-2 md:grid-cols-1 gap-2 md:gap-2 p-1"></div>
                 <div class="mt-2 text-center bg-purple-100 rounded-lg p-1 md:p-2 font-bold text-purple-800 text-sm md:text-base">السؤال: <span id="qNum" class="text-lg md:text-xl">1</span> / 32</div>
             </div>
         </div>
@@ -139,7 +136,6 @@
     </div>
 
     <script>
-        // إعدادات الصوت
         const audioFiles = { 
             bg: new Audio('https://i.top4top.io/m_3694tdvbo1.mp3'), 
             correct: new Audio('https://a.top4top.io/m_36949p7371.mp3'), 
@@ -148,6 +144,13 @@
         
         audioFiles.bg.loop = true; 
         let isMuted = false;
+
+        function vibrate(pattern) {
+            // دالة الاهتزاز الآمنة (تعمل على أندرويد فقط)
+            if (navigator.vibrate) {
+                navigator.vibrate(pattern);
+            }
+        }
 
         function playBackgroundMusic() { 
             if(isMuted) return; 
@@ -169,16 +172,8 @@
         function toggleMute() { 
             isMuted = !isMuted; 
             document.getElementById('muteBtn').textContent = isMuted ? '🔇' : '🔊'; 
-            
-            Object.values(audioFiles).forEach(audio => {
-                audio.muted = isMuted;
-            });
-
-            if(isMuted) { 
-                audioFiles.bg.pause(); 
-            } else { 
-                playBackgroundMusic(); 
-            } 
+            Object.values(audioFiles).forEach(audio => { audio.muted = isMuted; });
+            if(isMuted) { audioFiles.bg.pause(); } else { playBackgroundMusic(); } 
         }
 
         const teams = ['الأبطال 🦁', 'العباقرة 💡', 'المبدعون 🎨', 'المحترفون 🚀'];
@@ -317,8 +312,8 @@
             if(isSpinning || state.qList.length === 0) return;
             isSpinning = true; 
             
-            // اهتزاز عند بدء الدوران (للهواتف الداعمة)
-            if (navigator.vibrate) { navigator.vibrate([30, 50, 30, 50, 30]); }
+            // اهتزاز فوري عند بدء الدوران
+            vibrate([30, 50, 30, 50, 30]);
 
             const wheel = document.getElementById('wheel');
             const extraSpins = 5 + Math.floor(Math.random() * 5); 
@@ -383,7 +378,7 @@
             if(idx === state.currentQ.a) { 
                 btn.classList.add('correct'); 
                 playSfx('correct'); 
-                if(navigator.vibrate) navigator.vibrate(100); // اهتزاز خفيف للإجابة الصحيحة
+                vibrate(100); 
                 fireConfetti(); 
                 state.scores[state.turn]++; 
                 resolveAnswer(true); 
@@ -391,7 +386,7 @@
                 btn.classList.add('wrong'); 
                 btns[state.currentQ.a].classList.add('correct'); 
                 playSfx('wrong'); 
-                if(navigator.vibrate) navigator.vibrate([100, 50, 100]); // اهتزاز طويل للخطأ
+                vibrate([100, 50, 100]); 
                 resolveAnswer(false); 
             }
         }
@@ -415,11 +410,14 @@
             teams.forEach((t, i) => {
                 const div = document.createElement('div');
                 div.className = `flex justify-between p-2 rounded-lg items-center ${i === state.turn ? 'bg-purple-100 border border-purple-300 font-bold shadow-sm' : 'bg-white border border-gray-100'}`;
-                // تم تكبير الخط هنا بشكل كبير للموبايل والكمبيوتر
+                // التعديل: فصل الرقم وتكبيره عن العلامة
                 div.innerHTML = `
                     <div class="flex flex-col items-center w-full">
-                        <span class="text-gray-700 text-xs md:text-base font-bold truncate w-full text-center mb-1">${t}</span>
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xl md:text-2xl font-black shadow-sm">${state.scores[i]} ✅</span>
+                        <span class="text-gray-700 text-[10px] md:text-base font-bold truncate w-full text-center mb-1 leading-tight">${t}</span>
+                        <div class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full shadow-sm flex items-baseline gap-1">
+                            <span class="text-xl md:text-3xl font-black leading-none">${state.scores[i]}</span>
+                            <span class="text-xs md:text-base">✅</span>
+                        </div>
                     </div>
                 `;
                 board.appendChild(div);
