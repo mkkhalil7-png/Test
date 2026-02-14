@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>القرص الدوار - عرض المجموعات الكامل</title>
+    <title>القرص الدوار - سلطنة عمان</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #8b5cf6; }
+        /* تفعيل التمرير العمودي لضمان ظهور كافة العناصر على الموبايل */
         body { font-family: 'Baloo Bhaijaan 2', cursive; overflow-x: hidden; overflow-y: auto; user-select: none; }
 
         /* الخلفية */
@@ -24,7 +25,7 @@
         .c2::after { width: 40px; height: 40px; top: -20px; left: 15px; }
         @keyframes moveCloud { 0% { left: -20%; } 100% { left: 120%; } }
 
-        /* العناصر */
+        /* التنسيقات */
         .wheel-wrapper { position: relative; filter: drop-shadow(0 20px 10px rgba(0,0,0,0.3)); transition: transform 0.3s; }
         .wheel-wrapper:active { transform: scale(0.98); }
         .wheel-svg { transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); border-radius: 50%; box-shadow: 0 0 0 10px #fbbf24, 0 0 0 20px #f59e0b, inset 0 0 20px rgba(0,0,0,0.5); }
@@ -39,9 +40,11 @@
         .hidden { display: none !important; }
         .confetti { position: fixed; width: 10px; height: 10px; z-index: 100; pointer-events: none; }
         
+        /* تنسيق الرسوم البيانية المتجاوب */
         .chart-container { display: flex; justify-content: center; align-items: center; margin-bottom: 1rem; background: #fff; border-radius: 15px; padding: 10px; border: 2px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); overflow-x: auto; }
         .chart-svg { height: auto; max-height: 250px; width: 100%; max-width: 500px; overflow: visible; }
         
+        /* SVG Elements */
         .axis-line { stroke: #475569; stroke-width: 2; }
         .grid-line { stroke: #e2e8f0; stroke-width: 1; }
         .axis-text { font-size: 11px; fill: #64748b; font-family: sans-serif; font-weight: 500; }
@@ -62,46 +65,47 @@
                 <img src="logo.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3063/3063822.png'" class="w-20 h-20 md:w-24 md:h-24 object-contain">
             </div>
             <h1 class="text-4xl md:text-6xl font-black text-purple-700 mb-2" style="-webkit-text-stroke: 1px white;">القرص الدوار</h1>
-            <p class="text-xl md:text-2xl text-gray-600 mb-8 font-bold">🌟 مسابقة الرياضيات الممتعة 🌟</p>
-            <button id="realStartBtn" class="btn-3d text-2xl md:text-4xl font-black py-3 md:py-4 px-12 w-full">🚀 انطلق!</button>
+            <p class="text-xl md:text-2xl text-gray-600 mb-6 font-bold">🌟 مسابقة الرياضيات الممتعة 🌟</p>
+            
+            <button id="realStartBtn" class="btn-3d text-2xl md:text-4xl font-black py-3 md:py-4 px-12 w-full mb-8">🚀 انطلق!</button>
+
+            <div class="border-t-2 border-dashed border-gray-300 pt-4 mb-2">
+                <h3 class="text-2xl md:text-3xl font-black text-purple-600 mb-1">الصف الخامس</h3>
+                <h4 class="text-lg md:text-xl font-bold text-gray-500">سلطنة عمان 🇴🇲</h4>
+            </div>
         </div>
-        <footer class="mt-8 text-white font-bold bg-black/30 px-6 py-2 rounded-full mb-4">تصميم أ. محمد خليل</footer>
+        <footer class="mt-4 text-white font-bold bg-black/30 px-6 py-2 rounded-full mb-4">تصميم أ. محمد خليل</footer>
     </div>
 
     <div id="gameScreen" class="hidden min-h-screen w-full max-w-7xl mx-auto p-2 md:p-4 flex flex-col md:flex-row gap-6 items-center justify-center">
         <div class="w-full md:w-80 flex flex-col gap-2 md:gap-4 self-start mt-2 md:mt-4">
-            
-            <div class="glass-panel p-2 md:p-4 text-center bg-yellow-50">
-                <p class="text-gray-500 font-bold text-xs md:text-sm">الدور على:</p>
-                <h2 id="currentTeamName" class="text-lg md:text-3xl font-black text-purple-700">مجموعة 1</h2>
+            <div class="glass-panel p-2 md:p-4 text-center bg-yellow-50 flex flex-row md:flex-col justify-between items-center md:justify-center">
+                <p class="text-gray-500 font-bold text-sm md:mb-1">الدور على:</p>
+                <h2 id="currentTeamName" class="text-xl md:text-3xl font-black text-purple-700">مجموعة 1</h2>
             </div>
-
-            <div class="glass-panel p-2 md:p-4">
-                <div class="flex justify-between items-center border-b pb-1 mb-1 md:pb-2 md:mb-2">
-                    <h3 class="text-sm md:text-lg font-bold text-gray-700">النتائج</h3> <span class="text-lg md:text-2xl">🏆</span>
+            <div class="glass-panel p-2 md:p-4 flex-1 flex flex-col max-h-[150px] md:max-h-[500px]">
+                <div class="flex justify-between items-center border-b pb-2 mb-2">
+                    <h3 class="text-md md:text-lg font-bold text-gray-700">النتائج</h3> <span class="text-xl md:text-2xl">🏆</span>
                 </div>
-                
-                <div id="scoreboard" class="grid grid-cols-2 md:grid-cols-1 gap-2 md:gap-2">
-                    </div>
-
-                <div class="mt-2 text-center bg-purple-100 rounded-lg p-1 md:p-2 font-bold text-purple-800 text-xs md:text-base">السؤال: <span id="qNum" class="text-base md:text-xl">1</span> / 32</div>
+                <div id="scoreboard" class="grid grid-cols-2 md:grid-cols-1 gap-2 md:gap-2 overflow-y-auto p-1"></div>
+                <div class="mt-2 text-center bg-purple-100 rounded-lg p-1 md:p-2 font-bold text-purple-800 text-sm md:text-base">السؤال: <span id="qNum" class="text-lg md:text-xl">1</span> / 32</div>
             </div>
         </div>
 
         <div class="flex-1 flex flex-col items-center justify-center relative w-full mb-10">
-            <div id="wheelSection" class="flex flex-col items-center justify-center transform transition-all duration-500 py-4 md:py-10">
-                <div class="wheel-wrapper mb-6 md:mb-8">
+            <div id="wheelSection" class="flex flex-col items-center justify-center transform transition-all duration-500 py-10">
+                <div class="wheel-wrapper mb-8">
                     <div class="pointer-container">
-                        <svg width="50" height="60" md:width="60" md:height="70" viewBox="0 0 50 60"><path d="M25 60 L0 0 L50 0 Z" fill="#eab308" stroke="#a16207" stroke-width="3"/><circle cx="25" cy="5" r="5" fill="#713f12"/></svg>
+                        <svg width="60" height="70" viewBox="0 0 50 60"><path d="M25 60 L0 0 L50 0 Z" fill="#eab308" stroke="#a16207" stroke-width="3"/><circle cx="25" cy="5" r="5" fill="#713f12"/></svg>
                     </div>
-                    <svg id="wheel" class="wheel-svg cursor-pointer w-[250px] h-[250px] md:w-[500px] md:h-[500px]" viewBox="0 0 400 400">
+                    <svg id="wheel" class="wheel-svg cursor-pointer w-[280px] h-[280px] md:w-[500px] md:h-[500px]" viewBox="0 0 400 400">
                         <defs><radialGradient id="gradShadow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%"><stop offset="85%" style="stop-color:rgb(0,0,0,0)" /><stop offset="100%" style="stop-color:rgb(0,0,0,0.3)" /></radialGradient></defs>
                         <circle cx="200" cy="200" r="198" fill="#333" /><g id="wheelSegments"></g><circle cx="200" cy="200" r="198" fill="url(#gradShadow)" pointer-events="none"/>
                         <circle cx="200" cy="200" r="50" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/><circle cx="200" cy="200" r="40" fill="#ef4444" stroke="#b91c1c" stroke-width="0" style="filter: drop-shadow(0 4px 2px rgba(0,0,0,0.3))"/>
                         <text x="200" y="210" text-anchor="middle" font-size="28" font-weight="900" fill="white" style="text-shadow: 1px 1px 0px #991b1b; pointer-events: none;">أدر</text>
                     </svg>
                 </div>
-                <button onclick="triggerSpin()" class="btn-3d text-lg md:text-2xl font-bold py-3 px-8 md:px-12 animate-bounce">اضغط للدوران 🎲</button>
+                <button onclick="triggerSpin()" class="btn-3d text-xl md:text-2xl font-bold py-3 px-12 animate-bounce">اضغط للدوران 🎲</button>
             </div>
 
             <div id="questionSection" class="hidden w-full max-w-3xl transform transition-all duration-500 scale-95 opacity-0">
@@ -138,7 +142,6 @@
         // إعدادات الصوت
         const audioFiles = { 
             bg: new Audio('https://i.top4top.io/m_3694tdvbo1.mp3'), 
-            // لا يوجد صوت دوران spin
             correct: new Audio('https://a.top4top.io/m_36949p7371.mp3'), 
             wrong: new Audio('https://b.top4top.io/m_3694toimd1.mp3') 
         };
@@ -412,11 +415,11 @@
             teams.forEach((t, i) => {
                 const div = document.createElement('div');
                 div.className = `flex justify-between p-2 rounded-lg items-center ${i === state.turn ? 'bg-purple-100 border border-purple-300 font-bold shadow-sm' : 'bg-white border border-gray-100'}`;
-                // تم تحسين العرض ليناسب الشبكة الصغيرة
+                // تم تكبير الخط هنا بشكل كبير للموبايل والكمبيوتر
                 div.innerHTML = `
                     <div class="flex flex-col items-center w-full">
-                        <span class="text-gray-700 text-xs md:text-base font-bold truncate w-full text-center">${t}</span>
-                        <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs md:text-sm font-black mt-1">${state.scores[i]}✅</span>
+                        <span class="text-gray-700 text-xs md:text-base font-bold truncate w-full text-center mb-1">${t}</span>
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xl md:text-2xl font-black shadow-sm">${state.scores[i]} ✅</span>
                     </div>
                 `;
                 board.appendChild(div);
