@@ -3,451 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>القرص الدوار - سلطنة عمان</title>
+    <title>القرص الدوار - سلطنة عمان - مدرسة التميز</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #8b5cf6; }
         body { font-family: 'Baloo Bhaijaan 2', cursive; overflow-x: hidden; overflow-y: auto; user-select: none; }
-
-        /* الخلفية */
-        .nature-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 60%, #90EE90 60%, #228B22 100%); z-index: -2; }
-        .sun { position: absolute; top: 50px; right: 50px; width: 100px; height: 100px; background: radial-gradient(circle, #FFD700, #FFA500); border-radius: 50%; box-shadow: 0 0 40px #FFD700; animation: sunPulse 4s infinite alternate; }
+       .nature-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 60%, #90EE90 60%, #228B22 100%); z-index: -2; }
+       .sun { position: absolute; top: 50px; right: 50px; width: 100px; height: 100px; background: radial-gradient(circle, #FFD700, #FFA500); border-radius: 50%; box-shadow: 0 0 40px #FFD700; animation: sunPulse 4s infinite alternate; }
         @keyframes sunPulse { from { transform: scale(1); } to { transform: scale(1.1); } }
-        
-        .cloud { position: absolute; background: white; border-radius: 50px; opacity: 0.8; animation: moveCloud linear infinite; }
-        .cloud::after, .cloud::before { content: ''; position: absolute; background: white; border-radius: 50%; }
-        .c1 { width: 120px; height: 60px; top: 10%; left: -20%; animation-duration: 45s; }
-        .c1::after { width: 50px; height: 50px; top: -25px; left: 20px; }
-        .c1::before { width: 40px; height: 40px; top: -15px; left: 60px; }
-        .c2 { width: 100px; height: 50px; top: 20%; left: -20%; animation-duration: 65s; animation-delay: 5s; transform: scale(0.8); }
-        .c2::after { width: 40px; height: 40px; top: -20px; left: 15px; }
+       .cloud { position: absolute; background: white; border-radius: 50px; opacity: 0.8; animation: moveCloud linear infinite; }
+       .c1 { width: 120px; height: 60px; top: 10%; left: -20%; animation-duration: 45s; }
+       .c2 { width: 100px; height: 50px; top: 20%; left: -20%; animation-duration: 65s; animation-delay: 5s; transform: scale(0.8); }
         @keyframes moveCloud { 0% { left: -20%; } 100% { left: 120%; } }
-
-        /* التنسيقات */
-        .wheel-wrapper { position: relative; filter: drop-shadow(0 20px 10px rgba(0,0,0,0.3)); transition: transform 0.3s; }
-        .wheel-wrapper:active { transform: scale(0.98); }
-        .wheel-svg { transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); border-radius: 50%; box-shadow: 0 0 0 10px #fbbf24, 0 0 0 20px #f59e0b, inset 0 0 20px rgba(0,0,0,0.5); }
-        .pointer-container { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); z-index: 20; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4)); }
-        .glass-panel { background: rgba(255, 255, 255, 0.95); border: 4px solid white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .btn-3d { background: linear-gradient(to bottom, #ef4444, #b91c1c); color: white; border: none; border-radius: 50px; box-shadow: 0 8px 0 #7f1d1d, 0 15px 20px rgba(0,0,0,0.3); transition: all 0.1s; cursor: pointer; }
-        .btn-3d:active { transform: translateY(8px); box-shadow: 0 0 0 #7f1d1d, 0 0 0 rgba(0,0,0,0.3); }
-        .option-btn { background: white; border: 2px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 0 #cbd5e1; transition: all 0.1s; cursor: pointer; }
-        .option-btn:active { transform: translateY(4px); box-shadow: 0 0 0; }
-        .option-btn.correct { background: #86efac; border-color: #22c55e; box-shadow: 0 4px 0 #15803d; }
-        .option-btn.wrong { background: #fca5a5; border-color: #ef4444; box-shadow: 0 4px 0 #b91c1c; }
-        .hidden { display: none !important; }
-        .confetti { position: fixed; width: 10px; height: 10px; z-index: 100; pointer-events: none; }
-        
-        .chart-container { display: flex; justify-content: center; align-items: center; margin-bottom: 1rem; background: #fff; border-radius: 15px; padding: 10px; border: 2px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); overflow-x: auto; }
-        .chart-svg { height: auto; max-height: 250px; width: 100%; max-width: 500px; overflow: visible; }
-        
-        .axis-line { stroke: #475569; stroke-width: 2; }
-        .grid-line { stroke: #e2e8f0; stroke-width: 1; }
-        .axis-text { font-size: 11px; fill: #64748b; font-family: sans-serif; font-weight: 500; }
-        .bar-val { font-size: 12px; fill: #334155; font-weight: bold; }
-        .bar-label { font-size: 13px; fill: #1e293b; font-weight: bold; }
-        .q-img-frame { max-height: 180px; border-radius: 10px; margin: 0 auto 10px; display: block; border: 3px solid #e2e8f0; }
+       .wheel-wrapper { position: relative; filter: drop-shadow(0 20px 10px rgba(0,0,0,0.3)); transition: transform 0.3s; }
+       .wheel-svg { transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); border-radius: 50%; box-shadow: 0 0 0 10px #fbbf24, 0 0 0 20px #f59e0b, inset 0 0 20px rgba(0,0,0,0.5); }
+       .pointer-container { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); z-index: 20; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4)); }
+       .glass-panel { background: rgba(255, 255, 255, 0.95); border: 4px solid white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+       .btn-3d { background: linear-gradient(to bottom, #ef4444, #b91c1c); color: white; border: none; border-radius: 50px; box-shadow: 0 8px 0 #7f1d1d, 0 15px 20px rgba(0,0,0,0.3); transition: all 0.1s; cursor: pointer; }
+       .btn-3d:active { transform: translateY(8px); box-shadow: 0 0 0; }
+       .option-btn { background: white; border: 2px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 0 #cbd5e1; transition: all 0.1s; cursor: pointer; text-align: right; }
+       .option-btn.correct { background: #86efac; border-color: #22c55e; box-shadow: 0 4px 0 #15803d; }
+       .option-btn.wrong { background: #fca5a5; border-color: #ef4444; box-shadow: 0 4px 0 #b91c1c; }
+       .chart-container { display: flex; justify-content: center; align-items: center; margin-bottom: 1rem; background: #fff; border-radius: 15px; padding: 15px; border: 2px solid #e2e8f0; }
+       .math-svg { width: 100%; max-width: 450px; height: auto; overflow: visible; }
+       .axis-text { font-size: 10px; fill: #475569; font-weight: bold; }
+       .grid-line { stroke: #e2e8f0; stroke-width: 1; stroke-dasharray: 2; }
     </style>
 </head>
 <body class="pb-10">
-
     <div class="nature-bg"><div class="sun"></div><div class="cloud c1"></div><div class="cloud c2"></div></div>
-    
-    <button id="muteBtn" class="fixed top-4 left-4 z-50 bg-white/80 backdrop-blur p-3 rounded-full shadow-lg text-2xl cursor-pointer hover:scale-110 transition-transform border-2 border-purple-200">🔊</button>
+    <button id="muteBtn" class="fixed top-4 left-4 z-50 bg-white/80 backdrop-blur p-3 rounded-full shadow-lg text-2xl">🔊</button>
 
-    <div id="startScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto">
-        <div class="bg-white/95 p-8 md:p-10 rounded-3xl shadow-2xl text-center max-w-2xl w-full border-4 border-yellow-400 m-auto">
-            <div class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-6 bg-white rounded-full flex items-center justify-center shadow-lg border-4 border-purple-100 overflow-hidden">
-                <img src="logo.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3063/3063822.png'" class="w-20 h-20 md:w-24 md:h-24 object-contain">
-            </div>
-            <h1 class="text-4xl md:text-6xl font-black text-purple-700 mb-2" style="-webkit-text-stroke: 1px white;">القرص الدوار</h1>
-            <p class="text-xl md:text-2xl text-gray-600 mb-6 font-bold">🌟 مسابقة الرياضيات الممتعة 🌟</p>
-            
-            <button id="realStartBtn" class="btn-3d text-2xl md:text-4xl font-black py-3 md:py-4 px-12 w-full mb-8">🚀 انطلق!</button>
-
-            <div class="border-t-2 border-dashed border-gray-300 pt-4 mb-2">
-                <h3 class="text-2xl md:text-3xl font-black text-purple-600 mb-1">الصف الخامس</h3>
-                <h4 class="text-lg md:text-xl font-bold text-gray-500">سلطنة عمان 🇴🇲</h4>
-            </div>
+    <div id="startScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div class="bg-white/95 p-10 rounded-3xl shadow-2xl text-center max-w-2xl w-full border-4 border-yellow-400">
+            <h1 class="text-5xl md:text-7xl font-black text-purple-700 mb-4">القرص الدوار</h1>
+            <p class="text-2xl text-gray-600 mb-8 font-bold italic">🌟 تحدي المنوال والرسم البياني الخطي 🌟</p>
+            <button id="realStartBtn" class="btn-3d text-3xl font-black py-4 px-16 w-full">🚀 ابدأ المسابقة!</button>
         </div>
-        <footer class="mt-4 text-white font-bold bg-black/30 px-6 py-2 rounded-full mb-4">تصميم أ. محمد خليل</footer>
     </div>
 
-    <div id="gameScreen" class="hidden min-h-screen w-full max-w-7xl mx-auto p-2 md:p-4 flex flex-col md:flex-row gap-6 items-center justify-center">
-        <div class="w-full md:w-80 flex flex-col gap-2 md:gap-4 self-start mt-2 md:mt-4">
-            <div class="glass-panel p-2 md:p-4 text-center bg-yellow-50 flex flex-row md:flex-col justify-between items-center md:justify-center">
-                <p class="text-gray-500 font-bold text-sm md:mb-1">الدور على:</p>
-                <h2 id="currentTeamName" class="text-xl md:text-3xl font-black text-purple-700">مجموعة 1</h2>
+    <div id="gameScreen" class="hidden min-h-screen w-full max-w-7xl mx-auto p-4 flex flex-col md:flex-row gap-6 items-center justify-center">
+        <div class="w-full md:w-80 flex flex-col gap-4 self-start mt-4">
+            <div class="glass-panel p-4 text-center bg-yellow-50">
+                <p class="text-gray-500 font-bold mb-1">الدور على:</p>
+                <h2 id="currentTeamName" class="text-3xl font-black text-purple-700">مجموعة 1</h2>
             </div>
-            <div class="glass-panel p-2 md:p-4 flex-1 flex flex-col max-h-[150px] md:max-h-[500px]">
-                <div class="flex justify-between items-center border-b pb-2 mb-2">
-                    <h3 class="text-md md:text-lg font-bold text-gray-700">النتائج</h3> <span class="text-xl md:text-2xl">🏆</span>
-                </div>
-                <div id="scoreboard" class="grid grid-cols-2 md:grid-cols-1 gap-2 md:gap-2 p-1"></div>
-                <div class="mt-2 text-center bg-purple-100 rounded-lg p-1 md:p-2 font-bold text-purple-800 text-sm md:text-base">السؤال: <span id="qNum" class="text-lg md:text-xl">1</span> / 32</div>
-            </div>
+            <div id="scoreboard" class="glass-panel p-4 flex flex-col gap-2"></div>
+            <div class="bg-purple-100 rounded-lg p-2 font-bold text-center">السؤال: <span id="qNum">1</span> / 32</div>
         </div>
 
-        <div class="flex-1 flex flex-col items-center justify-center relative w-full mb-10">
-            <div id="wheelSection" class="flex flex-col items-center justify-center transform transition-all duration-500 py-10">
+        <div class="flex-1 flex flex-col items-center justify-center relative w-full">
+            <div id="wheelSection" class="flex flex-col items-center">
                 <div class="wheel-wrapper mb-8">
-                    <div class="pointer-container">
-                        <svg width="60" height="70" viewBox="0 0 50 60"><path d="M25 60 L0 0 L50 0 Z" fill="#eab308" stroke="#a16207" stroke-width="3"/><circle cx="25" cy="5" r="5" fill="#713f12"/></svg>
-                    </div>
-                    <svg id="wheel" class="wheel-svg cursor-pointer w-[280px] h-[280px] md:w-[500px] md:h-[500px]" viewBox="0 0 400 400">
-                        <defs><radialGradient id="gradShadow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%"><stop offset="85%" style="stop-color:rgb(0,0,0,0)" /><stop offset="100%" style="stop-color:rgb(0,0,0,0.3)" /></radialGradient></defs>
-                        <circle cx="200" cy="200" r="198" fill="#333" /><g id="wheelSegments"></g><circle cx="200" cy="200" r="198" fill="url(#gradShadow)" pointer-events="none"/>
-                        <circle cx="200" cy="200" r="50" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/><circle cx="200" cy="200" r="40" fill="#ef4444" stroke="#b91c1c" stroke-width="0" style="filter: drop-shadow(0 4px 2px rgba(0,0,0,0.3))"/>
-                        <text x="200" y="210" text-anchor="middle" font-size="28" font-weight="900" fill="white" style="text-shadow: 1px 1px 0px #991b1b; pointer-events: none;">أدر</text>
-                    </svg>
+                    <div class="pointer-container"><svg width="60" height="70" viewBox="0 0 50 60"><path d="M25 60 L0 0 L50 0 Z" fill="#eab308"/></svg></div>
+                    <svg id="wheel" class="wheel-svg w-[300px] h-[300px] md:w-[500px] md:h-[500px]" viewBox="0 0 400 400"><g id="wheelSegments"></g><circle cx="200" cy="200" r="40" fill="#ef4444" stroke="white" stroke-width="4"/></svg>
                 </div>
-                <button onclick="triggerSpin()" class="btn-3d text-xl md:text-2xl font-bold py-3 px-12 animate-bounce">اضغط للدوران 🎲</button>
+                <button onclick="triggerSpin()" class="btn-3d text-2xl font-bold py-3 px-12 animate-bounce">أدر القرص 🎲</button>
             </div>
 
-            <div id="questionSection" class="hidden w-full max-w-3xl transform transition-all duration-500 scale-95 opacity-0">
-                <div class="flex justify-center mb-4 md:mb-6">
-                    <div class="bg-white rounded-full w-16 h-16 md:w-24 md:h-24 flex items-center justify-center border-4 md:border-8 border-purple-300 shadow-xl relative z-10">
-                        <span id="timer" class="text-2xl md:text-4xl font-black text-gray-700">60</span>
-                    </div>
-                </div>
-                <div class="glass-panel p-4 md:p-12 relative -mt-8 md:-mt-12 pt-10 md:pt-16 text-center">
-                    <h2 class="text-purple-600 font-bold text-lg md:text-xl mb-2 md:mb-4 bg-purple-50 inline-block px-4 py-1 rounded-full">سؤال التحدي</h2>
-                    <img id="qImage" src="" class="q-img-frame hidden">
+            <div id="questionSection" class="hidden w-full max-w-3xl">
+                <div class="flex justify-center mb-6"><div class="bg-white rounded-full w-20 h-20 flex items-center justify-center border-8 border-purple-300 shadow-xl"><span id="timer" class="text-4xl font-black">60</span></div></div>
+                <div class="glass-panel p-8 pt-12 text-center relative">
                     <div id="chartContainer" class="chart-container hidden"></div>
-                    <p id="qText" class="text-lg md:text-3xl font-bold text-gray-800 mb-4 md:mb-8 leading-relaxed"></p>
-                    <div id="optionsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4"></div>
+                    <p id="qText" class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 leading-relaxed"></p>
+                    <div id="optionsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="resultScreen" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white p-6 md:p-10 rounded-3xl shadow-2xl text-center max-w-2xl w-full border-4 border-purple-300 m-auto">
-            <div class="text-6xl md:text-8xl mb-4 animate-bounce">🏆</div>
-            <h2 class="text-3xl md:text-5xl font-black text-purple-700 mb-6">النتائج النهائية</h2>
-            <div class="flex justify-center gap-4 md:gap-6 mb-8">
-                <div class="bg-green-50 p-2 md:p-4 rounded-xl border-2 border-green-200 w-1/3"><p class="text-green-700 font-bold text-sm md:text-base">✅ صحيحة</p><p id="finalCorrect" class="text-2xl md:text-4xl font-black text-green-600">0</p></div>
-                <div class="bg-red-50 p-2 md:p-4 rounded-xl border-2 border-red-200 w-1/3"><p class="text-red-700 font-bold text-sm md:text-base">❌ خاطئة</p><p id="finalWrong" class="text-2xl md:text-4xl font-black text-red-600">0</p></div>
-            </div>
-            <div id="finalRanking" class="bg-gray-50 p-4 rounded-xl mb-8 space-y-2 text-right border border-gray-200 max-h-40 overflow-y-auto"></div>
-            <button onclick="location.reload()" class="btn-3d text-xl md:text-2xl font-bold py-3 px-12 w-full">لعبة جديدة 🔄</button>
         </div>
     </div>
 
     <script>
-        const audioFiles = { 
-            bg: new Audio('https://i.top4top.io/m_3694tdvbo1.mp3'), 
-            correct: new Audio('https://a.top4top.io/m_36949p7371.mp3'), 
-            wrong: new Audio('https://b.top4top.io/m_3694toimd1.mp3') 
+        const svgs = {
+            muscatTemp: () => `
+                <svg viewBox="0 0 400 250" class="math-svg">
+                    <line x1="50" y1="200" x2="380" y2="200" stroke="#475569" stroke-width="2"/>
+                    <line x1="50" y1="200" x2="50" y2="20" stroke="#475569" stroke-width="2"/>
+                    <path d="M50 200 H380 M50 200 V20" stroke="#ccc" stroke-width="1" stroke-dasharray="2"/>
+                    <path d="M50 160 L100 150 L150 140 L200 100 L250 60 L300 40 L350 60" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="50" cy="160" r="4" fill="#ef4444"/><text x="40" y="215" class="axis-text">يناير</text>
+                    <circle cx="100" cy="150" r="4" fill="#ef4444"/><text x="90" y="215" class="axis-text">فبراير</text>
+                    <circle cx="150" cy="140" r="4" fill="#ef4444"/><text x="140" y="215" class="axis-text">مارس</text>
+                    <circle cx="200" cy="100" r="4" fill="#ef4444"/><text x="190" y="215" class="axis-text">أبريل</text>
+                    <circle cx="250" cy="60" r="4" fill="#ef4444"/><text x="240" y="215" class="axis-text">مايو</text>
+                    <circle cx="300" cy="40" r="4" fill="#ef4444"/><text x="290" y="215" class="axis-text">يونيو</text>
+                    <circle cx="350" cy="60" r="4" fill="#ef4444"/><text x="340" y="215" class="axis-text">يوليو</text>
+                    <text x="25" y="165" class="axis-text">24°</text><text x="25" y="145" class="axis-text">27°</text><text x="25" y="45" class="axis-text">40°</text>
+                </svg>`,
+            coolingCurve: () => `
+                <svg viewBox="0 0 400 250" class="math-svg">
+                    <line x1="50" y1="200" x2="380" y2="200" stroke="#334155" stroke-width="2"/>
+                    <line x1="50" y1="200" x2="50" y2="20" stroke="#334155" stroke-width="2"/>
+                    <path d="M50 40 C 120 160, 220 180, 360 180" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                    <text x="50" y="215" class="axis-text">0</text><text x="340" y="215" class="axis-text">60 دقيقة</text>
+                    <text x="30" y="45" class="axis-text">90°</text><text x="30" y="185" class="axis-text">20°</text>
+                </svg>`,
+            barItems: () => `
+                <svg viewBox="0 0 400 200" class="math-svg">
+                    <rect x="60" y="100" width="40" height="80" fill="#a855f7" rx="4"/><text x="65" y="195" class="axis-text">أحمد</text>
+                    <rect x="140" y="40" width="40" height="140" fill="#a855f7" rx="4"/><text x="145" y="195" class="axis-text">زياد</text>
+                    <rect x="220" y="80" width="40" height="100" fill="#a855f7" rx="4"/><text x="225" y="195" class="axis-text">حسن</text>
+                    <rect x="300" y="120" width="40" height="60" fill="#a855f7" rx="4"/><text x="305" y="195" class="axis-text">شريف</text>
+                    <line x1="50" y1="180" x2="360" y2="180" stroke="black"/>
+                </svg>`
         };
-        
-        audioFiles.bg.loop = true; 
-        let isMuted = false;
-
-        function vibrate(pattern) {
-            // دالة الاهتزاز الآمنة (تعمل على أندرويد فقط)
-            if (navigator.vibrate) {
-                navigator.vibrate(pattern);
-            }
-        }
-
-        function playBackgroundMusic() { 
-            if(isMuted) return; 
-            if(audioFiles.bg.paused) { 
-                audioFiles.bg.play().catch(e => console.log("User interaction needed")); 
-            } 
-        }
-        
-        function playSfx(name) { 
-            if(isMuted) return; 
-            try { 
-                if(audioFiles[name]) {
-                    audioFiles[name].currentTime = 0; 
-                    audioFiles[name].play().catch(e => {}); 
-                }
-            } catch(e) {} 
-        }
-        
-        function toggleMute() { 
-            isMuted = !isMuted; 
-            document.getElementById('muteBtn').textContent = isMuted ? '🔇' : '🔊'; 
-            Object.values(audioFiles).forEach(audio => { audio.muted = isMuted; });
-            if(isMuted) { audioFiles.bg.pause(); } else { playBackgroundMusic(); } 
-        }
-
-        const teams = ['الأبطال 🦁', 'العباقرة 💡', 'المبدعون 🎨', 'المحترفون 🚀'];
-        let rotation = 0; let isSpinning = false;
-        
-        // مولدات الرسوم (SVG)
-        const createBarChart = (data, maxVal) => {
-            const chartH = 260, drawH = 200, startX = 50, steps = 5;
-            let svg = `<svg viewBox="0 0 380 ${chartH}" class="chart-svg">`;
-            const stepVal = maxVal / steps;
-            for(let i=0; i<=steps; i++) {
-                const val = Math.round(i * stepVal); const y = drawH - (val / maxVal * 180) + 20;
-                svg += `<line x1="${startX}" y1="${y}" x2="360" y2="${y}" class="grid-line" />`;
-                svg += `<text x="${startX - 8}" y="${y+3}" text-anchor="end" class="axis-text">${val}</text>`;
-            }
-            svg += `<line x1="${startX}" y1="${drawH+20}" x2="360" y2="${drawH+20}" class="axis-line" />`;
-            svg += `<line x1="${startX}" y1="20" x2="${startX}" y2="${drawH+20}" class="axis-line" />`;
-            const barWidth = 40, gap = 35;
-            data.forEach((d, i) => {
-                const height = (d.value / maxVal) * 180; const x = startX + 25 + i * (barWidth + gap); const y = drawH + 20 - height;
-                svg += `<rect x="${x}" y="${y}" width="${barWidth}" height="${height}" fill="${d.color}" rx="4" />`;
-                svg += `<text x="${x + barWidth/2}" y="${y - 5}" text-anchor="middle" class="bar-val">${d.value}</text>`;
-                svg += `<text x="${x + barWidth/2}" y="${drawH + 45}" text-anchor="middle" class="bar-label">${d.label}</text>`;
-            });
-            svg += `</svg>`; return svg;
-        };
-
-        const createTally = (count) => {
-            let svg = `<svg viewBox="0 0 200 100" class="chart-svg" style="background:white; border-radius:10px; border:1px solid #e2e8f0;">`;
-            svg += `<path d="M40 20 L40 80 M60 20 L60 80 M80 20 L80 80 M100 20 L100 80" stroke="#334155" stroke-width="4" stroke-linecap="round"/>`;
-            svg += `<line x1="30" y1="80" x2="110" y2="20" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>`;
-            svg += `<path d="M130 20 L130 80 M150 20 L150 80" stroke="#334155" stroke-width="4" stroke-linecap="round"/>`;
-            svg += `</svg>`; return svg;
-        };
-
-        const createPicto = (count) => {
-            let svg = `<svg viewBox="0 0 300 80" class="chart-svg" style="background:white; border-radius:10px;">`;
-            svg += `<text x="150" y="55" font-size="45" text-anchor="middle">😊 😊</text>`; svg += `</svg>`; return svg;
-        }
-
-        const createSpinner = () => {
-            let svg = `<svg viewBox="0 0 200 200" class="chart-svg">`;
-            svg += `<path d="M100 100 L100 10 A90 90 0 1 1 10 100 Z" fill="#f87171" stroke="#333" stroke-width="2"/>`;
-            svg += `<path d="M100 100 L10 100 A90 90 0 0 1 100 10 Z" fill="#60a5fa" stroke="#333" stroke-width="2"/>`;
-            svg += `<circle cx="100" cy="100" r="5" fill="black"/>`;
-            svg += `<polygon points="100,80 90,100 110,100" fill="black" transform="rotate(45 100 100)"/>`; 
-            svg += `</svg>`; return svg;
-        }
-
-        const createBag = () => {
-             let svg = `<svg viewBox="0 0 200 150" class="chart-svg">`;
-             svg += `<path d="M50 140 Q50 150 150 140 Q180 100 150 20 L50 20 Q20 100 50 140" fill="#fcd34d" stroke="#d97706" stroke-width="3"/>`;
-             for(let i=0; i<5; i++) svg += `<circle cx="${60 + i*20}" cy="${100 + (i%2)*20}" r="8" fill="#ef4444" stroke="#991b1b"/>`; 
-             svg += `<circle cx="90" cy="80" r="8" fill="#3b82f6" stroke="#1e40af"/>`; svg += `<circle cx="120" cy="70" r="8" fill="#3b82f6" stroke="#1e40af"/>`;
-             svg += `</svg>`; return svg;
-        }
 
         const questions = [
-            { q: "جمع يوسف معلومات حول ألوان الدراجات. انظر للرسم، ما إجمالي عدد الدراجات؟", svg: createBarChart([{label:'أزرق', value:12, color:'#3b82f6'}, {label:'أحمر', value:8, color:'#ef4444'}], 15), o: ["12", "8", "20", "4"], a: 2 },
-            { q: "أي من الطرق التالية تُستخدم لجمع البيانات الأولية من الأشخاص؟", o: ["الرسم البياني", "الاستبيان", "المنوال", "الاحتمال"], a: 1 },
-            { q: "في استبيان الفاكهة المفضلة (انظر الرسم)، كم يزيد عدد محبي المانجو عن التفاح؟", svg: createBarChart([{label:'مانجو', value:15, color:'#facc15'}, {label:'تفاح', value:5, color:'#4ade80'}], 20), o: ["5", "10", "15", "20"], a: 1 },
-            { q: "الأداة المستخدمة لتنظيم البيانات قبل رسمها بيانياً هي:", o: ["المسطرة", "الدوار", "الجداول", "المنقلة"], a: 2 },
-            { q: "إذا كانت علامات العد لسيارات المدرسة هي الشكل التالي، فما عدد السيارات؟", svg: createTally(7), o: ["5", "6", "7", "10"], a: 2 },
-            { q: "ما الفائدة من استخدام \"الاستبيان\" في المدرسة؟", o: ["قياس الطول", "معرفة آراء الطلاب", "حساب المساحة", "رسم الزوايا"], a: 1 },
-            { q: "إذا جمع خالد 10 ريالات وسعد 5 ريالات، فما مجموع ما جمعه الاثنان؟", o: ["5", "10", "15", "50"], a: 2 },
-            { q: "في جدول المذاكرة، إذا ذاكر سالم \"الرياضيات والعلوم\"، كم عدد المواد التي ذاكرها؟", o: ["1", "2", "3", "4"], a: 1 },
-            { q: "التمثيل البياني بالأعمدة يُستخدم لـ:", o: ["قياس الوقت", "مقارنة البيانات", "الاحتمال المؤكد", "الضرب الذهني"], a: 1 },
-            { q: "انظر الرسم: كم ضعفاً يمثل عدد الطلاب الذين يفضلون الجري مقارنة بالقراءة؟", svg: createBarChart([{label:'جري', value:12, color:'#fb923c'}, {label:'قراءة', value:4, color:'#a78bfa'}], 15), o: ["ضعف واحد", "ضعفان", "3 أضعاف", "4 أضعاف"], a: 2 },
-            { q: "إذا كان عدد مواليد شهر ديسمبر يساوي شهر نوفمبر، وكان شهر نوفمبر 4، فكم مواليد شهر ديسمبر؟", o: ["2", "4", "8", "12"], a: 1 },
-            { q: "في التمثيل بالمصورات، إذا كان الرمز (😊) يمثل 6 سمكات، فما عدد السمكات في الرسم أدناه؟", svg: createPicto(2), o: ["6", "12", "18", "24"], a: 1 },
-            { q: "إذا أظهر الرسم البياني عدد القردة والأفيال، فما إجمالي الحيوانات؟", svg: createBarChart([{label:'قردة', value:10, color:'#a855f7'}, {label:'أفيال', value:4, color:'#3b82f6'}], 12), o: ["6", "10", "14", "40"], a: 2 },
-            { q: "كم عدد الأشخاص الذين يفضلون تمر 'المدينة' حسب الرسم البياني؟", svg: createBarChart([{label:'سكري', value:150, color:'#d97706'}, {label:'المدينة', value:250, color:'#713f12'},{label:'عجوة', value:100, color:'#1f2937'}], 300), o: ["50", "100", "150", "250"], a: 3 },
-            { q: "إذا كان عدد طلاب الصف الخامس 16 طالباً والسادس 14، فكم الإجمالي؟", o: ["16", "14", "30", "2"], a: 2 },
-            { q: "الفرق بين \"الأكثر تفضيلاً\" و\"الأقل تفضيلاً\" يُحسب بعملية:", o: ["الجمع", "الضرب", "الطرح", "القسمة"], a: 2 },
-            { q: "إذا عثر أحمد على 5 أشياء وزياد على 3 أشياء، كم عدد الأشياء معهما معاً؟", o: ["3", "5", "8", "15"], a: 2 },
-            { q: "من الرسم البياني: بكم يزيد محبو الفنون عن العلوم؟", svg: createBarChart([{label:'فنون', value:14, color:'#ec4899'}, {label:'علوم', value:10, color:'#22d3ee'}], 20), o: ["2", "4", "10", "14"], a: 1 },
-            { q: "في الرسم البياني، العمود الأطول يدل على:", o: ["الأقل عدداً", "الأكثر عدداً", "الصفر", "المتوسط"], a: 1 },
-            { q: "ما احتمال ظهور العدد \"7\" عند رمي حجر نرد ذو 6 أوجه؟", o: ["مؤكد", "مرجح", "متساو", "مستحيل"], a: 3 },
-            { q: "انظر للكيس: سحب كرة حمراء هو حدث:", svg: createBag(), o: ["مستحيل", "غير مرجح", "مرجح", "مؤكد"], a: 2 },
-            { q: "اختيار عدد \"زوجي\" من بين الأعداد (1، 2، 3، 4) يعتبر احتمال:", o: ["مؤكد", "مستحيل", "متساو", "غير مرجح"], a: 2 },
-            { q: "ما وصف احتمال سحب بطاقة تحمل عدداً أصغر من 7 من مجموعة بطاقات (1 إلى 6)؟", o: ["غير مرجح", "متساو", "مرجح", "مؤكد"], a: 3 },
-            { q: "عند تدوير دوار به 4 أرقام (1,2,3,4)، ما احتمال توقفه عند الرقم \"10\"؟", o: ["مؤكد", "مرجح", "متساو", "مستحيل"], a: 3 },
-            { q: "عند رمي عملة معدنية، ما احتمال ظهور (صورة)؟", o: ["مؤكد", "مستحيل", "متساو", "مرجح"], a: 2 },
-            { q: "كيس به 10 كرات حمراء فقط. ما احتمال سحب كرة حمراء؟", o: ["مستحيل", "غير مرجح", "متساو", "مؤكد"], a: 3 },
-            { q: "ما احتمال أن تشرق الشمس من المغرب؟", o: ["مؤكد", "مرجح", "متساو", "مستحيل"], a: 3 },
-            { q: "في صندوق به 9 كرات صفراء وكرة واحدة خضراء. سحب كرة خضراء هو احتمال:", o: ["مؤكد", "مرجح", "غير مرجح", "مستحيل"], a: 2 },
-            { q: "عند رمي حجر نرد (1-6)، ما احتمال ظهور عدد أكبر من 6؟", o: ["مستحيل", "مؤكد", "متساو", "مرجح"], a: 0 },
-            { q: "قرص مقسم إلى 4 أقسام (3 أحمر، 1 أزرق). وقوف المؤشر على الأحمر هو احتمال:", svg: createSpinner(), o: ["ضعيف", "مرجح", "مستحيل", "متساو"], a: 1 },
-            { q: "احتمال أن يكون يوم غد هو يوم (الجمعة) بعد يوم (الخميس) هو احتمال:", o: ["مؤكد", "مستحيل", "غير مرجح", "متساو"], a: 0 },
-            { q: "اختيار حرف (م) من كلمة (محمد) هو احتمال:", o: ["مؤكد", "مستحيل", "مرجح", "ضعيف"], a: 2 }
+            { q: "اكتب المنوال لمجموعة البيانات التالية: 5، 6، 7، 7، 7، 4", o: ["5", "6", "7", "4"], a: 2 },
+            { q: "ما هو المنوال لمجموعة الكلمات: ليمون، برتقال، ليمون، تفاح، موز؟", o: ["برتقال", "ليمون", "تفاح", "موز"], a: 1 },
+            { q: "أوجد المنوال للأعداد: 4، 7، 8، 5، 8، 7، 4، 8", o: ["4", "7", "8", "لا يوجد"], a: 2 },
+            { q: "ما المنوال لمجموعة الخضروات: ليمون، خيار، جزر، فلفل، ليمون؟", o: ["ليمون", "خيار", "جزر", "فلفل"], a: 0 },
+            { q: "إذا اختار 10 طلاب ألوانهم المفضلة: (أزرق، أحمر، أزرق، أصفر، أخضر، أخضر، أزرق). ما اللون الأكثر تفضيلاً؟", o: ["الأحمر", "الأصفر", "الأزرق", "الأخضر"], a: 2 },
+            { q: "يقول محمد: إذا كان المنوال للأعداد (3، 5، 2، 5، 3، مربع) هو 5، فإن قيمة المربع هي 5. هل قوله صحيح؟", o: ["نعم", "لا"], a: 0 },
+            { q: "تقول فاطمة: إذا كان المنوال للأعداد (3، 6، 2، 6، 6، س+2) هو 6، فإن قيمة س تساوي 4. هل ما تقوله صحيح؟", o: ["نعم", "لا"], a: 0 },
+            { q: "في المجموعة (7، 10، س، 9، 10، 3)، إذا كان المنوال هو 10، فما قيمة س؟", o: ["9", "10", "7", "3"], a: 1 },
+            { q: "إذا كان المنوال للبيانات (4، 1، 2، 1، 4، ص) هو 4، فما قيمة ص المحتملة؟", o: ["1", "2", "4", "0"], a: 2 },
+            { q: "مجموعة درجات حرارة أسبوع: 25، 26، 25، 23، 25، 27، 25. ما قيمة المنوال؟", o: ["23", "25", "26", "27"], a: 1 },
+            { q: "من الرسم البياني للأعمدة المقابل، من الشخص الذي عثر على أكبر عدد من الأشياء؟", svg: svgs.barItems(), o: ["أحمد", "زياد", "حسن", "شريف"], a: 1 },
+            { q: "ما قيمة المنوال الخاصة بعدد الأشياء التي عثر عليها الطلاب في الرسم؟", svg: svgs.barItems(), o: ["4", "9", "5", "3"], a: 1 },
+            { q: "إذا كان لدينا 7 أيام بدرجات (25، 26، 25، 23، 25، 27، 25)، كم مرة تكرر المنوال؟", o: ["مرتين", "3 مرات", "4 مرات", "5 مرات"], a: 2 },
+            { q: "في استبيان حيوانات: زرافة(4)، فيل(10)، قرد(4). ما هو المنوال؟", o: ["زرافة", "فيل", "قرد", "لا يوجد"], a: 1 },
+            { q: "أي شهر يمثل المنوال في عدد الأيام (31 يوماً يتكرر 7 مرات، 30 يوماً يتكرر 4 مرات)؟", o: ["شهر بـ 30 يوماً", "شهر بـ 31 يوماً", "شهر فبراير", "لا يوجد"], a: 1 },
+            { q: "من رسم درجات حرارة مسقط، ما هي درجة الحرارة في شهر مارس؟", svg: svgs.muscatTemp(), o: ["24°", "27°", "30°", "40°"], a: 1 },
+            { q: "من رسم مسقط، ما هو الشهر الذي سجل أعلى درجة حرارة؟", svg: svgs.muscatTemp(), o: ["مايو", "يونيو", "يوليو", "أبريل"], a: 1 },
+            { q: "في الرسم البياني الخطي لمسقط، ماذا يمثل المحور الأفقي؟", svg: svgs.muscatTemp(), o: ["درجة الحرارة", "الشهور", "عدد الطلاب", "الساعات"], a: 1 },
+            { q: "كم كانت درجة الحرارة في شهر يناير حسب الرسم؟", svg: svgs.muscatTemp(), o: ["20°", "24°", "30°", "40°"], a: 1 },
+            { q: "هل يمثل رسم مسقط بيانات متصلة أم منفصلة؟", svg: svgs.muscatTemp(), o: ["متصلة (تتغير باستمرار)", "منفصلة"], a: 0 },
+            { q: "كم كانت درجة حرارة المشروب الساخن في بداية الوقت (0 دقيقة)؟", svg: svgs.coolingCurve(), o: ["20°", "50°", "90°", "100°"], a: 2 },
+            { q: "بناءً على منحنى التبريد، ماذا يحدث للحرارة بمرور الزمن؟", svg: svgs.coolingCurve(), o: ["ترتفع", "تنخفض", "تثبت", "تختفي"], a: 1 },
+            { q: "ما الفرق الجوهري بين الرسم الخطي والعمودي؟", o: ["الألوان", "الخطي يعرض تغير شيء بمرور الزمن", "العمودي أكبر", "لا يوجد فرق"], a: 1 },
+            { q: "لماذا لا يصح ربط نقاط حضور الطلاب في أيام الأسبوع بخط؟", o: ["لأنها بيانات منفصلة", "لأن الخط مائل", "لأن الطلاب يغيبون", "لأنها أرقام"], a: 0 },
+            { q: "في الرسم الخطي، إذا كانت النقطة بين 20 و 30، فما القيمة التقريبية؟", o: ["22", "25", "29", "35"], a: 1 },
+            { q: "أي المواقف التالية يناسبه 'الرسم البياني الخطي'؟", o: ["ألوان السيارات", "طول نبته تنمو كل يوم", "أنواع الفواكه", "أسماء الغائبين"], a: 1 },
+            { q: "ما هو المنوال لمجموعة الأعداد: 2، 2، 3، 3، 1؟", o: ["2 فقط", "3 فقط", "2 و 3", "1 فقط"], a: 2 },
+            { q: "إذا كان الرسم الخطي 'أفقياً'، فماذا يعني ذلك؟", o: ["زيادة", "نقصان", "ثبات القيمة", "انتهاء البيانات"], a: 2 },
+            { q: "في منحنى التبريد، متى تبدأ الحرارة بالاستقرار تقريباً؟", svg: svgs.coolingCurve(), o: ["10 دقائق", "30 دقيقة", "60 دقيقة", "5 دقائق"], a: 2 },
+            { q: "من رسم مسقط، كم كان الفرق التقريبي بين حرارة يناير ويونيو؟", svg: svgs.muscatTemp(), o: ["10 درجات", "16 درجة", "20 درجة", "5 درجات"], a: 1 },
+            { q: "إذا لم يتكرر أي عدد في مجموعة البيانات، فما هو المنوال؟", o: ["صفر", "أصغر عدد", "لا يوجد منوال", "أكبر عدد"], a: 2 },
+            { q: "ما فائدة الاستبيان في جمع البيانات؟", o: ["للرسم فقط", "للحصول على آراء الناس وتنظيمها", "لقياس الطول", "لحساب الضرب"], a: 1 }
         ];
 
-        let state = { qList: [...questions], currentQ: null, scores: [0,0,0,0], turn: 0, qCount: 0, timer: null };
-        const colors = ['#f87171', '#fb923c', '#facc15', '#a3e635', '#4ade80', '#22d3ee', '#60a5fa', '#a78bfa'];
+        let state = { qList: [...questions], currentQ: null, scores: , turn: 0, qCount: 0, timer: null };
+        const teams = ['الأبطال 🦁', 'العباقرة 💡', 'المبدعون 🎨', 'المحترفون 🚀'];
+        const segmentColors = ['#f87171', '#fb923c', '#facc15', '#4ade80', '#60a5fa', '#a78bfa', '#f472b6', '#94a3b8'];
 
-        window.onload = function() {
-            document.getElementById('realStartBtn').addEventListener('click', startGame);
-            document.getElementById('wheel').addEventListener('click', triggerSpin);
-            document.getElementById('muteBtn').addEventListener('click', toggleMute);
-        };
+        window.onload = () => { document.getElementById('realStartBtn').onclick = startGame; drawWheel(); };
 
-        function startGame() {
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('gameScreen').classList.remove('hidden');
-            document.getElementById('gameScreen').style.display = 'flex';
-            playBackgroundMusic();
-            drawWheel();
-            updateUI();
-        }
+        function startGame() { document.getElementById('startScreen').classList.add('hidden'); document.getElementById('gameScreen').classList.remove('hidden'); updateUI(); }
 
         function drawWheel() {
-            const svg = document.getElementById('wheelSegments');
-            svg.innerHTML = '';
-            const count = Math.min(state.qList.length, 8); 
-            if(count === 0) return;
-            const slice = 360 / count;
+            const container = document.getElementById('wheelSegments'); container.innerHTML = '';
+            const count = 8; const arc = 360/count;
             for(let i=0; i<count; i++) {
-                const start = i * slice; const end = (i+1) * slice;
-                const x1 = 200 + 198 * Math.cos(Math.PI * (start-90)/180); const y1 = 200 + 198 * Math.sin(Math.PI * (start-90)/180);
-                const x2 = 200 + 198 * Math.cos(Math.PI * (end-90)/180); const y2 = 200 + 198 * Math.sin(Math.PI * (end-90)/180);
-                const large = slice > 180 ? 1 : 0;
-                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                path.setAttribute("d", `M200,200 L${x1},${y1} A198,198 0 ${large},1 ${x2},${y2} Z`);
-                path.setAttribute("fill", colors[i % colors.length]); path.setAttribute("stroke", "white"); path.setAttribute("stroke-width", "2");
-                svg.appendChild(path);
-                const mid = start + slice/2;
-                const tx = 200 + 150 * Math.cos(Math.PI * (mid-90)/180); const ty = 200 + 150 * Math.sin(Math.PI * (mid-90)/180);
+                const start = i*arc - 90; const end = (i+1)*arc - 90;
+                const x1 = 200 + 190*Math.cos(Math.PI*start/180); const y1 = 200 + 190*Math.sin(Math.PI*start/180);
+                const x2 = 200 + 190*Math.cos(Math.PI*end/180); const y2 = 200 + 190*Math.sin(Math.PI*end/180);
+                const d = `M200,200 L${x1},${y1} A190,190 0 0,1 ${x2},${y2} Z`;
+                const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                p.setAttribute("d", d); p.setAttribute("fill", segmentColors[i]); p.setAttribute("stroke", "white"); p.setAttribute("stroke-width", "2");
+                container.appendChild(p);
                 const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                text.setAttribute("x", tx); text.setAttribute("y", ty); text.setAttribute("text-anchor", "middle"); text.setAttribute("dominant-baseline", "middle");
-                text.setAttribute("fill", "white"); text.setAttribute("font-weight", "900"); text.setAttribute("font-size", "24");
-                text.style.textShadow = "1px 1px 2px rgba(0,0,0,0.5)"; text.textContent = i+1; svg.appendChild(text);
+                const mid = start + arc/2;
+                text.setAttribute("x", 200 + 140*Math.cos(Math.PI*mid/180)); text.setAttribute("y", 200 + 140*Math.sin(Math.PI*mid/180));
+                text.setAttribute("fill", "white"); text.setAttribute("font-weight", "bold"); text.setAttribute("text-anchor", "middle"); text.textContent = i+1;
+                container.appendChild(text);
             }
         }
 
         function triggerSpin() {
-            if(isSpinning || state.qList.length === 0) return;
-            isSpinning = true; 
-            
-            // اهتزاز فوري عند بدء الدوران
-            vibrate([30, 50, 30, 50, 30]);
-
-            const wheel = document.getElementById('wheel');
-            const extraSpins = 5 + Math.floor(Math.random() * 5); 
-            const count = Math.min(state.qList.length, 8);
-            const slice = 360 / count;
-            const targetIndex = Math.floor(Math.random() * count); 
-            const randomOffset = Math.floor(Math.random() * (slice - 10)) + 5; 
-            const targetAngle = (targetIndex * slice) + randomOffset; 
-            const spinAmount = (extraSpins * 360) + (360 - targetAngle); 
-            rotation += spinAmount;
-            wheel.style.transform = `rotate(${rotation}deg)`;
-            setTimeout(() => { isSpinning = false; showQuestion(targetIndex); }, 4000);
+            if(state.qList.length === 0) return;
+            const wheel = document.getElementById('wheel'); const rand = 1800 + Math.random()*1800;
+            wheel.style.transform = `rotate(${rand}deg)`;
+            setTimeout(() => { const idx = Math.floor(Math.random()*state.qList.length); showQuestion(idx); }, 4000);
         }
 
-        function showQuestion(index) {
-            const realIndex = index % state.qList.length;
-            state.currentQ = state.qList[realIndex];
-            state.qList.splice(realIndex, 1);
-
-            const qSection = document.getElementById('questionSection');
-            const wheelSection = document.getElementById('wheelSection');
-            
-            const chartContainer = document.getElementById('chartContainer');
-            const qImg = document.getElementById('qImage');
-            
-            if (state.currentQ.svg) {
-                chartContainer.innerHTML = state.currentQ.svg;
-                chartContainer.classList.remove('hidden');
-                qImg.classList.add('hidden');
-            } else if (state.currentQ.img) {
-                qImg.src = state.currentQ.img;
-                qImg.classList.remove('hidden');
-                chartContainer.classList.add('hidden');
-            } else {
-                chartContainer.classList.add('hidden');
-                qImg.classList.add('hidden');
-            }
-
-            wheelSection.style.display = 'none'; 
-            qSection.classList.remove('hidden');
-            setTimeout(() => { qSection.classList.remove('scale-95', 'opacity-0'); qSection.classList.add('scale-100', 'opacity-100'); }, 50);
-
+        function showQuestion(idx) {
+            state.currentQ = state.qList.splice(idx, 1);
+            document.getElementById('wheelSection').classList.add('hidden');
+            document.getElementById('questionSection').classList.remove('hidden');
             document.getElementById('qText').textContent = state.currentQ.q;
+            const chart = document.getElementById('chartContainer');
+            if(state.currentQ.svg) { chart.innerHTML = state.currentQ.svg; chart.classList.remove('hidden'); }
+            else { chart.classList.add('hidden'); }
             const grid = document.getElementById('optionsGrid'); grid.innerHTML = '';
             state.currentQ.o.forEach((opt, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn w-full p-2 md:p-4 text-lg md:text-xl font-bold text-gray-700 text-right h-full';
-                btn.textContent = opt; btn.onclick = () => checkAnswer(i, btn); grid.appendChild(btn);
+                const b = document.createElement('button');
+                b.className = 'option-btn p-4 text-xl font-bold';
+                b.textContent = opt; b.onclick = () => check(i, b);
+                grid.appendChild(b);
             });
             startTimer();
         }
 
         function startTimer() {
             let t = 60; document.getElementById('timer').textContent = t;
-            if(state.timer) clearInterval(state.timer);
-            state.timer = setInterval(() => { t--; document.getElementById('timer').textContent = t; if(t <= 0) { clearInterval(state.timer); resolveAnswer(false); } }, 1000);
+            state.timer = setInterval(() => { t--; document.getElementById('timer').textContent = t; if(t<=0) { clearInterval(state.timer); resolve(false); } }, 1000);
         }
 
-        function checkAnswer(idx, btn) {
+        function check(i, b) {
             clearInterval(state.timer);
-            const btns = document.querySelectorAll('.option-btn'); btns.forEach(b => b.disabled = true);
-            if(idx === state.currentQ.a) { 
-                btn.classList.add('correct'); 
-                playSfx('correct'); 
-                vibrate(100); 
-                fireConfetti(); 
-                state.scores[state.turn]++; 
-                resolveAnswer(true); 
-            } else { 
-                btn.classList.add('wrong'); 
-                btns[state.currentQ.a].classList.add('correct'); 
-                playSfx('wrong'); 
-                vibrate([100, 50, 100]); 
-                resolveAnswer(false); 
-            }
+            const correct = (i === state.currentQ.a);
+            if(correct) { b.classList.add('correct'); state.scores[state.turn]++; }
+            else { b.classList.add('wrong'); document.querySelectorAll('.option-btn')[state.currentQ.a].classList.add('correct'); }
+            setTimeout(() => resolve(correct), 2000);
         }
 
-        function resolveAnswer(isCorrect) {
-            updateUI();
-            setTimeout(() => {
-                state.qCount++; state.turn = (state.turn + 1) % 4;
-                if(state.qList.length === 0 || state.qCount >= 32) { endGame(); } else {
-                    const qSection = document.getElementById('questionSection');
-                    const wheelSection = document.getElementById('wheelSection');
-                    qSection.classList.add('hidden', 'scale-95', 'opacity-0'); qSection.classList.remove('scale-100', 'opacity-100');
-                    wheelSection.style.display = 'flex'; document.getElementById('qNum').textContent = state.qCount + 1; updateUI(); drawWheel();
-                }
-            }, 2500);
+        function resolve(correct) {
+            state.qCount++; state.turn = (state.turn + 1) % 4;
+            if(state.qCount >= 32 |
+
+| state.qList.length === 0) { alert('انتهت المسابقة! مبروك لجميع المجموعات'); location.reload(); }
+            else {
+                document.getElementById('questionSection').classList.add('hidden');
+                document.getElementById('wheelSection').classList.remove('hidden');
+                document.getElementById('qNum').textContent = state.qCount + 1;
+                updateUI();
+            }
         }
 
         function updateUI() {
             document.getElementById('currentTeamName').textContent = teams[state.turn];
-            const board = document.getElementById('scoreboard'); board.innerHTML = '';
+            const sb = document.getElementById('scoreboard'); sb.innerHTML = '';
             teams.forEach((t, i) => {
-                const div = document.createElement('div');
-                div.className = `flex justify-between p-2 rounded-lg items-center ${i === state.turn ? 'bg-purple-100 border border-purple-300 font-bold shadow-sm' : 'bg-white border border-gray-100'}`;
-                // التعديل: فصل الرقم وتكبيره عن العلامة
-                div.innerHTML = `
-                    <div class="flex flex-col items-center w-full">
-                        <span class="text-gray-700 text-[10px] md:text-base font-bold truncate w-full text-center mb-1 leading-tight">${t}</span>
-                        <div class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full shadow-sm flex items-baseline gap-1">
-                            <span class="text-xl md:text-3xl font-black leading-none">${state.scores[i]}</span>
-                            <span class="text-xs md:text-base">✅</span>
-                        </div>
-                    </div>
-                `;
-                board.appendChild(div);
+                const d = document.createElement('div');
+                d.className = `flex justify-between p-3 rounded-xl ${i===state.turn? 'bg-purple-600 text-white shadow-lg' : 'bg-white border'}`;
+                d.innerHTML = `<span class="font-bold">${t}</span><span class="font-black text-xl">${state.scores[i]}</span>`;
+                sb.appendChild(d);
             });
-        }
-
-        function endGame() {
-            document.getElementById('gameScreen').classList.add('hidden'); document.getElementById('resultScreen').classList.remove('hidden'); document.getElementById('resultScreen').style.display = 'flex';
-            const totalCorrect = state.scores.reduce((a,b)=>a+b,0); const totalWrong = state.qCount - totalCorrect;
-            document.getElementById('finalCorrect').textContent = totalCorrect; document.getElementById('finalWrong').textContent = totalWrong;
-            const ranking = teams.map((t, i) => ({name: t, s: state.scores[i]})).sort((a,b) => b.s - a.s);
-            const rankDiv = document.getElementById('finalRanking'); rankDiv.innerHTML = '';
-            ranking.forEach((r, i) => {
-                const row = document.createElement('div');
-                row.className = 'flex justify-between items-center p-3 border-b border-gray-200 last:border-0';
-                row.innerHTML = `<span class="font-bold text-gray-700">${i===0?'👑 ':''}#${i+1} ${r.name}</span> <span class="font-black text-purple-600">${r.s} نقطة</span>`;
-                rankDiv.appendChild(row);
-            });
-            fireConfetti();
-        }
-
-        function fireConfetti() {
-            const colors = ['#ef4444', '#3b82f6', '#22c55e', '#fbbf24', '#d946ef'];
-            for(let i=0; i<100; i++) {
-                const c = document.createElement('div'); c.className = 'confetti'; c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-                c.style.left = Math.random()*100 + '%'; c.style.top = -10 + 'px'; document.body.appendChild(c);
-                const speed = 1 + Math.random() * 3; const angle = Math.random() * 360;
-                const anim = c.animate([ { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 }, { transform: `translate(${Math.random()*200 - 100}px, ${window.innerHeight}px) rotate(${angle}deg)`, opacity: 0 } ], { duration: speed * 1000, easing: 'linear' });
-                anim.onfinish = () => c.remove();
-            }
         }
     </script>
 </body>
